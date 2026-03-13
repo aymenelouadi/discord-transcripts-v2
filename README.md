@@ -5,8 +5,8 @@
 
   <h1>discord-transcript-v2</h1>
 
-  <p><strong>The only Discord transcript library with full Components V2 support.</strong><br/>
-  Generate beautiful, pixel-perfect HTML transcripts — classic messages, rich embeds, <em>and</em> every Components V2 type.</p>
+  <p><strong>The only Discord transcript library that supports both classic Embeds <em>and</em> full Components V2.</strong><br/>
+  Generate beautiful, pixel-perfect HTML transcripts — classic messages, rich embeds, reactions, <em>and</em> every Components V2 type (Containers, Sections, MediaGallery, Buttons, Select Menus, and more).</p>
 
   <br/>
 
