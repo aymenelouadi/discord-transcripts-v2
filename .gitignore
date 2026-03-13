@@ -1,7 +1,30 @@
 build/
+dist/
 
-# Created by https://www.toptal.com/developers/gitignore/api/node,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,macos
+# ── Editor ──────────────────────────────────────────────
+.vscode/
+.idea/
+
+# ── Lock files (use package.json as source of truth) ────
+package-lock.json
+yarn.lock
+
+# ── pnpm workspace (not needed outside monorepo) ────────
+pnpm-workspace.yaml
+pnpm-lock.yaml
+
+# ── Environment secrets ──────────────────────────────────
+.env
+
+# ── Test artifacts ────────────────────────────────────────
+tests/
+
+# ── Docs (replaced by README.md) ─────────────────────────
+docs/
+
+# ── Legacy configs ────────────────────────────────────────
+.eslintrc.json
+
 
 ### macOS ###
 # General

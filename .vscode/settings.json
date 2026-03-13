@@ -1,8 +1,0 @@
-{
-  "editor.tabSize": 2,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "never"
-  },
-  "typescript.tsdk": "node_modules/typescript/lib"
-}

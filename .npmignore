@@ -1,0 +1,27 @@
+# Source & dev
+src/
+tests/
+docs/
+media/
+.github/
+.vscode/
+
+# Config
+_tsconfig*.json
+eslint.config.mjs
+.eslintrc.json
+.prettierrc.json
+.prettierignore
+pnpm-workspace.yaml
+pnpm-lock.yaml
+package-lock.json
+
+# Env
+.env
+.env.example
+
+# Misc
+*.md
+!README.md
+*.log
+node_modules/

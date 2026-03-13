@@ -1,9 +1,9 @@
 {
-  "name": "discord-html-transcripts-components-v2",
+  "name": "discord-transcript-v2",
   "version": "1.0.0",
-  "description": "A fully-featured Discord HTML transcript generator with complete Components V2 support.",
+  "description": "The only Discord transcript library with full Components V2 support. Generate pixel-perfect HTML transcripts from any Discord channel.",
   "main": "dist/index.js",
-  "homepage": "https://github.com/aymenelouadi/discord-html-transcripts-components-v2",
+  "homepage": "https://github.com/aymenelouadi/discord-html-transcripts-components-v2#readme",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,16 +21,33 @@
     "url": "git+https://github.com/aymenelouadi/discord-html-transcripts-components-v2.git"
   },
   "keywords": [
+    "discord",
     "discord.js",
-    "discord.js-transcripts",
-    "discord.js-html-transcripts",
-    "html-transcripts",
-    "discord-html-transcripts",
+    "transcripts",
     "discord-transcripts",
+    "discord-html-transcripts",
+    "html-transcripts",
+    "components-v2",
     "discord-components-v2",
-    "components-v2"
+    "discord-transcript-v2",
+    "discord-logger",
+    "channel-export"
   ],
-  "author": "aymenelouadi",
+  "author": {
+    "name": "code_nexus",
+    "url": "https://github.com/aymenelouadi"
+  },
+  "funding": {
+    "type": "ko_fi",
+    "url": "https://ko-fi.com/code_nexus"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/aymenelouadi/discord-html-transcripts-components-v2/issues"
+  },
   "license": "MIT",
   "files": [
     "dist/**/*.js",
