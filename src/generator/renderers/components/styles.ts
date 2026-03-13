@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+﻿import type { CSSProperties } from 'react';
 import { ButtonStyle } from 'discord.js';
 
 // Container styles
@@ -29,22 +29,31 @@ export const ButtonStyleMapping = {
 } as const;
 
 export const globalStyles = `
-  /* ─── Discord Components V2 ─── */
-  /* Forked & redesigned by aymenelouadi */
-  /* https://github.com/aymenelouadi/discord-html-transcripts-components-v2 */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     Discord HTML Transcripts â€” Components V2 Styles
+     Redesigned by aymenelouadi
+     https://github.com/aymenelouadi/discord-html-transcripts-components-v2
+  â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-  /* ── V2 Container ── */
+  /* â”€â”€ V2 Container â”€â”€ */
   .dcv2-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 516px;
-    background-color: #2b2d31;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 8px;
+    max-width: 520px;
+    background: linear-gradient(135deg, #1e1f22 0%, #1a1b1e 100%);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-lg, 12px);
     overflow: hidden;
-    margin: 4px 0;
+    margin: 6px 0;
     box-sizing: border-box;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+
+  .dcv2-container:hover {
+    border-color: rgba(255,255,255,0.11);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3);
   }
 
   .dcv2-container.has-accent {
@@ -54,16 +63,16 @@ export const globalStyles = `
   .dcv2-container-inner {
     display: flex;
     flex-direction: column;
-    padding: 12px 16px;
-    gap: 8px;
+    padding: 14px 16px;
+    gap: 10px;
   }
 
   .dcv2-container-accent-bar {
     width: 4px;
-    border-radius: 4px 0 0 4px;
     flex-shrink: 0;
     align-self: stretch;
     min-height: 100%;
+    border-radius: 0;
   }
 
   .dcv2-container-accent-wrap {
@@ -72,14 +81,14 @@ export const globalStyles = `
     width: 100%;
   }
 
-  /* ── V2 Section ── */
+  /* â”€â”€ V2 Section â”€â”€ */
   .dcv2-section {
     display: flex;
     flex-direction: row;
     align-items: center;
     width: 100%;
-    max-width: 516px;
-    gap: 8px;
+    max-width: 520px;
+    gap: 10px;
     padding: 8px 0;
     box-sizing: border-box;
   }
@@ -99,7 +108,7 @@ export const globalStyles = `
     justify-content: center;
   }
 
-  /* ── V2 Separator ── */
+  /* â”€â”€ V2 Separator â”€â”€ */
   .dcv2-separator {
     display: block;
     width: 100%;
@@ -109,7 +118,7 @@ export const globalStyles = `
   .dcv2-separator-line {
     width: 100%;
     height: 1px;
-    background-color: rgba(79, 83, 89, 0.48);
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
     border: none;
     margin: 0;
   }
@@ -119,24 +128,25 @@ export const globalStyles = `
   }
 
   .dcv2-separator-spacing-lg {
-    padding: 8px 0;
+    padding: 10px 0;
   }
 
-  /* ── V2 Media Gallery ── */
+  /* â”€â”€ V2 Media Gallery â”€â”€ */
   .dcv2-media-gallery {
     display: grid;
-    gap: 4px;
+    gap: 3px;
     width: 100%;
-    max-width: 516px;
-    border-radius: 8px;
+    max-width: 520px;
+    border-radius: var(--radius-md, 10px);
     overflow: hidden;
     margin: 4px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
   }
 
   .dcv2-media-gallery-item {
     overflow: hidden;
     position: relative;
-    background: #1e1f22;
+    background: #111214;
     cursor: pointer;
   }
 
@@ -146,29 +156,44 @@ export const globalStyles = `
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .dcv2-media-gallery-item:hover img,
+  .dcv2-media-gallery-item:hover video {
+    transform: scale(1.03);
   }
 
   .dcv2-media-gallery-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.65);
+    background: rgba(0,0,0,0.6);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
-    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Inter', Whitney, sans-serif;
+    backdrop-filter: blur(2px);
+    letter-spacing: -0.5px;
   }
 
-  /* ── V2 Thumbnail ── */
+  /* â”€â”€ V2 Thumbnail â”€â”€ */
   .dcv2-thumbnail {
-    width: 80px;
-    height: 80px;
-    border-radius: 6px;
+    width: 84px;
+    height: 84px;
+    border-radius: var(--radius-sm, 6px);
     overflow: hidden;
     flex-shrink: 0;
-    background: #1e1f22;
+    background: #111214;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .dcv2-thumbnail:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
   }
 
   .dcv2-thumbnail img {
@@ -178,50 +203,67 @@ export const globalStyles = `
     display: block;
   }
 
-  /* ── V2 Text Display ── */
+  /* â”€â”€ V2 Text Display â”€â”€ */
   .dcv2-text-display {
-    color: #dbdee1;
+    color: #dde1e6;
     font-size: 14px;
-    line-height: 1.375;
-    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.45;
+    font-family: 'Inter', Whitney, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    letter-spacing: 0.01em;
   }
 
-  /* ── Buttons ── */
+  /* â”€â”€ Buttons â”€â”€ */
   .discord-button {
     color: #ffffff !important;
-    padding: 2px 16px;
-    border-radius: 3px;
+    padding: 3px 16px;
+    border-radius: 4px;
     text-decoration: none !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 7px;
     font-size: 14px;
     font-weight: 500;
-    height: 32px;
-    min-height: 32px;
+    height: 34px;
+    min-height: 34px;
     min-width: 60px;
     cursor: pointer;
-    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Inter', Whitney, sans-serif;
     text-align: center;
     box-sizing: border-box;
     border: none;
     outline: none;
-    transition: filter 0.1s ease, opacity 0.1s ease;
+    transition: filter 0.14s ease, transform 0.12s ease, box-shadow 0.14s ease;
     user-select: none;
     position: relative;
     overflow: hidden;
     white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .discord-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.14s ease;
+  }
+
+  .discord-button:hover::before {
+    background: rgba(255,255,255,0.08);
   }
 
   .discord-button:hover {
-    filter: brightness(0.85);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
 
   .discord-button.disabled {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
     pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
   }
 
   .discord-button-emoji {
@@ -231,8 +273,8 @@ export const globalStyles = `
   }
 
   .discord-button-emoji img {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   .discord-button-link-icon {
@@ -243,58 +285,68 @@ export const globalStyles = `
   }
 
   .discord-button-primary {
-    background-color: #5865f2;
+    background: #5865f2;
+    box-shadow: 0 2px 8px rgba(88,101,242,0.3);
   }
 
   .discord-button-secondary {
-    background-color: #4e5058;
+    background: #4e5058;
   }
 
   .discord-button-success {
-    background-color: #248046;
+    background: #248046;
+    box-shadow: 0 2px 8px rgba(36,128,70,0.3);
   }
 
   .discord-button-destructive {
-    background-color: #da373c;
+    background: #da373c;
+    box-shadow: 0 2px 8px rgba(218,55,60,0.3);
   }
 
   .discord-button-link {
-    background-color: #4e5058;
+    background: #4e5058;
   }
 
   .discord-button-premium {
-    background: linear-gradient(to right, #e79232, #c559de);
-    color: #ffffff !important;
+    background: linear-gradient(135deg, #e79232 0%, #c559de 100%);
+    box-shadow: 0 2px 12px rgba(197,89,222,0.35);
   }
 
-  /* ── Action Row ── */
-  .dcv2-action-row {
+  /* â”€â”€ Action Row â”€â”€ */
+  .discord-action-row-wrap {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 4px 0;
+    margin: 6px 0;
+    align-items: center;
   }
 
-  /* ── Select Menu ── */
+  /* â”€â”€ Select Menu â”€â”€ */
   .discord-select-menu {
-    margin: 4px 0;
     position: relative;
     width: 100%;
-    max-width: 516px;
-    min-height: 40px;
-    background-color: #1e1f22;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 4px;
+    max-width: 520px;
+    min-height: 42px;
+    background: #1a1b1e;
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: var(--radius-sm, 6px);
     color: #b5bac1;
     cursor: pointer;
-    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Inter', Whitney, sans-serif;
     font-size: 14px;
     display: flex;
     align-items: center;
-    padding: 0 12px;
+    padding: 0 14px;
     justify-content: space-between;
     box-sizing: border-box;
     user-select: none;
+    margin: 6px 0;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .discord-select-menu:hover {
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
 
   .discord-select-menu-placeholder {
@@ -302,14 +354,20 @@ export const globalStyles = `
     text-overflow: ellipsis;
     white-space: nowrap;
     flex: 1;
+    letter-spacing: 0.01em;
   }
 
   .discord-select-menu-arrow {
     display: flex;
     align-items: center;
-    margin-left: 8px;
+    margin-left: 10px;
     flex-shrink: 0;
-    color: #80848e;
+    color: #6d6f78;
+    transition: color 0.15s ease;
+  }
+
+  .discord-select-menu:hover .discord-select-menu-arrow {
+    color: #b5bac1;
   }
 
   .discord-select-menu-options {
@@ -317,24 +375,25 @@ export const globalStyles = `
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background-color: #2b2d31;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 4px;
+    background: #1e1f22;
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: var(--radius-sm, 6px);
     z-index: 100;
-    max-height: 320px;
+    max-height: 300px;
     overflow-y: auto;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
   }
 
   .discord-select-menu-option {
-    padding: 10px 12px;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
-    color: #dbdee1;
+    color: #dde1e6;
     font-size: 14px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.12s ease;
   }
 
   .discord-select-menu-option:last-child {
@@ -342,40 +401,41 @@ export const globalStyles = `
   }
 
   .discord-select-menu-option:hover {
-    background-color: rgba(88, 101, 242, 0.2);
+    background: rgba(88,101,242,0.18);
   }
 
   .discord-select-menu-option-label {
     font-weight: 500;
+    letter-spacing: 0.01em;
   }
 
   .discord-select-menu-option-desc {
-    color: #80848e;
-    font-size: 12px;
+    color: #6d6f78;
+    font-size: 11.5px;
     margin-top: 2px;
+    letter-spacing: 0.01em;
   }
 
-  /* ── Action Row wrapper ── */
-  .discord-action-row-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 4px 0;
-  }
-
-  /* ── V2 File Attachment ── */
+  /* â”€â”€ V2 File Attachment â”€â”€ */
   .dcv2-file {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: #2b2d31;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 8px;
-    padding: 10px 16px;
-    max-width: 516px;
-    margin: 4px 0;
+    gap: 14px;
+    background: #1a1b1e;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-md, 10px);
+    padding: 12px 16px;
+    max-width: 520px;
+    margin: 6px 0;
     box-sizing: border-box;
     cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .dcv2-file:hover {
+    background: #1e1f22;
+    border-color: rgba(255,255,255,0.13);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
   }
 
   .dcv2-file-icon {
@@ -388,29 +448,25 @@ export const globalStyles = `
   .dcv2-file-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     flex: 1;
     min-width: 0;
   }
 
   .dcv2-file-name {
-    color: #00a8fc;
+    color: #58a6ff;
     font-size: 14px;
     font-weight: 500;
-    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-overflow: ellipsis;
+    font-family: 'Inter', Whitney, sans-serif;
     overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
-    text-decoration: none;
-  }
-
-  .dcv2-file-name:hover {
-    text-decoration: underline;
+    letter-spacing: 0.01em;
   }
 
   .dcv2-file-size {
-    color: #80848e;
+    color: #6d6f78;
     font-size: 12px;
-    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Inter', Whitney, sans-serif;
   }
 `;

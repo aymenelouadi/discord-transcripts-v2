@@ -50,20 +50,22 @@ export default async function DiscordMessages({ messages, channel, callbacks, ..
         <DiscordMessage message={message} context={{ messages, channel, callbacks, ...options }} key={message.id} />
       ))}
       {/* footer */}
-      <div style={{ textAlign: 'center', width: '100%' }}>
-        {options.footerText
-          ? options.footerText
-              .replaceAll('{number}', messages.length.toString())
-              .replaceAll('{s}', messages.length > 1 ? 's' : '')
-          : `Exported ${messages.length} message${messages.length > 1 ? 's' : ''}.`}{' '}
+      <div className="transcript-footer">
+        <div className="transcript-footer-stats">
+          <span className="dot" />
+          {options.footerText
+            ? options.footerText
+                .replaceAll('{number}', messages.length.toString())
+                .replaceAll('{s}', messages.length > 1 ? 's' : '')
+            : `${messages.length} message${messages.length > 1 ? 's' : ''} exported`}
+        </div>
         {options.poweredBy ? (
-          <span style={{ textAlign: 'center' }}>
-            Powered by{' '}
-            <a href="https://github.com/aymenelouadi/discord-html-transcripts-components-v2" style={{ color: 'lightblue' }}>
+          <div className="transcript-footer-brand">
+            Generated with{' '}
+            <a href="https://github.com/aymenelouadi/discord-html-transcripts-components-v2">
               discord-html-transcripts-components-v2
             </a>
-            .
-          </span>
+          </div>
         ) : null}
       </div>
     </DiscordMessagesComponent>
