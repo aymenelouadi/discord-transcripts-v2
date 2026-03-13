@@ -1,6 +1,6 @@
 {
   "name": "discord-transcript-v2",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Generate pixel-perfect HTML transcripts from Discord channels. Supports classic messages, rich embeds, AND full Components V2 (Containers, Sections, MediaGallery, Buttons, Select Menus, and more).",
   "main": "dist/index.js",
   "homepage": "https://github.com/aymenelouadi/discord-html-transcripts-components-v2#readme",

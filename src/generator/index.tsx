@@ -1,5 +1,5 @@
 import { type Awaitable, type Channel, type Message, type Role, type User } from 'discord.js';
-import { prerenderToNodeStream } from 'react-dom/static';
+import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
 import { buildProfiles } from '../utils/buildProfiles';
 import { revealSpoiler, scrollToMessage } from '../static/client';
@@ -8,7 +8,6 @@ import path from 'path';
 import { renderToString } from '@derockdev/discord-components-core/hydrate';
 import DiscordMessages from './transcript';
 import type { ResolveImageCallback } from '../downloader/images';
-import { streamToString } from '../utils/utils';
 import parse from 'discord-markdown-parser';
 import type { ASTNode, SingleASTNode } from 'simple-markdown';
 import type { APIAttachment, APIMessage } from 'discord.js';
@@ -125,13 +124,13 @@ async function preFetchEntities(
 }
 
 export default async function render({ messages, channel, callbacks, ...options }: Omit<RenderMessageContext, 'resolvedEntities'>) {
-  const profiles = buildProfiles(messages);
+  // Pre-compute ALL async data before touching the React tree
+  const [resolvedProfiles, resolvedEntities] = await Promise.all([
+    buildProfiles(messages),
+    preFetchEntities(messages, callbacks, options.saveImages),
+  ]);
 
-  // Pre-fetch all channels, users, roles, and images BEFORE building the React tree
-  // so all components can be synchronous (no async function components in the tree)
-  const resolvedEntities = await preFetchEntities(messages, callbacks, options.saveImages);
-
-  const { prelude } = await prerenderToNodeStream(
+  const markup = renderToStaticMarkup(
     <html>
       <head>
         <meta charSet="utf-8" />
@@ -278,7 +277,7 @@ export default async function render({ messages, channel, callbacks, ...options 
             {/* profiles */}
             <script
               dangerouslySetInnerHTML={{
-                __html: `window.$discordMessage={profiles:${JSON.stringify(await profiles)}}`,
+                __html: `window.$discordMessage={profiles:${JSON.stringify(resolvedProfiles)}}`,
               }}
             ></script>
             {/* component library */}
@@ -305,13 +304,11 @@ export default async function render({ messages, channel, callbacks, ...options 
     </html>
   );
 
-  const markup = await streamToString(prelude);
-
   if (options.hydrate) {
     const result = await renderToString(markup, {
       beforeHydrate: async (document) => {
         document.defaultView.$discordMessage = {
-          profiles: await profiles,
+          profiles: resolvedProfiles,
         };
       },
     });
