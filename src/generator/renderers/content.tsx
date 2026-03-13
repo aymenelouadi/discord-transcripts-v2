@@ -40,7 +40,7 @@ type RenderContentContext = RenderMessageContext & {
  * @param context - The context to render the content in
  * @returns
  */
-export default async function MessageContent({ content, context }: { content: string; context: RenderContentContext }) {
+export default function MessageContent({ content, context }: { content: string; context: RenderContentContext }) {
   if (context.type === RenderType.REPLY && content.length > 180) content = content.slice(0, 180) + '...';
 
   // parse the markdown
@@ -67,13 +67,13 @@ export default async function MessageContent({ content, context }: { content: st
 }
 
 // This function can probably be combined into the MessageSingleASTNode function
-async function MessageASTNodes({
+function MessageASTNodes({
   nodes,
   context,
 }: {
   nodes: ASTNode;
   context: RenderContentContext;
-}): Promise<React.JSX.Element> {
+}): React.JSX.Element {
   if (Array.isArray(nodes)) {
     return (
       <>
@@ -87,7 +87,7 @@ async function MessageASTNodes({
   }
 }
 
-export async function MessageSingleASTNode({ node, context }: { node: SingleASTNode; context: RenderContentContext }) {
+export function MessageSingleASTNode({ node, context }: { node: SingleASTNode; context: RenderContentContext }) {
   if (!node) return null;
 
   const type = node.type as RuleTypesExtended;
@@ -129,7 +129,7 @@ export async function MessageSingleASTNode({ node, context }: { node: SingleASTN
 
     case 'channel': {
       const id = node.id as string;
-      const channel = await context.callbacks.resolveChannel(id);
+      const channel = context.resolvedEntities?.channels.get(id) ?? null;
 
       return (
         <DiscordMention type={channel ? (channel.isDMBased() ? 'channel' : getChannelType(channel.type)) : 'channel'}>
@@ -140,7 +140,7 @@ export async function MessageSingleASTNode({ node, context }: { node: SingleASTN
 
     case 'role': {
       const id = node.id as string;
-      const role = await context.callbacks.resolveRole(id);
+      const role = context.resolvedEntities?.roles.get(id) ?? null;
 
       return (
         <DiscordMention type="role" color={context.type === RenderType.REPLY ? undefined : role?.hexColor}>
@@ -151,7 +151,7 @@ export async function MessageSingleASTNode({ node, context }: { node: SingleASTN
 
     case 'user': {
       const id = node.id as string;
-      const user = await context.callbacks.resolveUser(id);
+      const user = context.resolvedEntities?.users.get(id) ?? null;
 
       return <DiscordMention type="user">{user ? (user.displayName ?? user.username) : `<@${id}>`}</DiscordMention>;
     }

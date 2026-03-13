@@ -1,6 +1,6 @@
 import { DiscordAttachment, DiscordAttachments } from '@derockdev/discord-components-react';
 import React from 'react';
-import type { APIAttachment, APIMessage, Attachment as AttachmentType, Message } from 'discord.js';
+import type { Attachment as AttachmentType, Message } from 'discord.js';
 import type { RenderMessageContext } from '..';
 import type { AttachmentTypes } from '../../types';
 import { formatBytes } from '../../utils/utils';
@@ -11,13 +11,13 @@ import { formatBytes } from '../../utils/utils';
  * @param context
  * @returns
  */
-export async function Attachments(props: { message: Message; context: RenderMessageContext }) {
+export function Attachments(props: { message: Message; context: RenderMessageContext }) {
   if (props.message.attachments.size === 0) return <></>;
 
   return (
     <DiscordAttachments slot="attachments">
       {props.message.attachments.map((attachment, id) => (
-        <Attachment attachment={attachment} message={props.message} context={props.context} key={id} />
+        <Attachment attachment={attachment} context={props.context} key={id} />
       ))}
     </DiscordAttachments>
   );
@@ -34,14 +34,12 @@ function getAttachmentType(attachment: AttachmentType): AttachmentTypes {
  * Renders one Discord Attachment
  * @param props - the attachment and rendering context
  */
-export async function Attachment({
+export function Attachment({
   attachment,
   context,
-  message,
 }: {
   attachment: AttachmentType;
   context: RenderMessageContext;
-  message: Message;
 }) {
   let url = attachment.url;
   const name = attachment.name;
@@ -50,16 +48,10 @@ export async function Attachment({
 
   const type = getAttachmentType(attachment);
 
-  // if the attachment is an image, download it to a data url
+  // if the attachment is an image, use the pre-resolved image URL
   if (type === 'image') {
-    const downloaded = await context.callbacks.resolveImageSrc(
-      attachment.toJSON() as APIAttachment,
-      message.toJSON() as APIMessage
-    );
-
-    if (downloaded !== null) {
-      url = downloaded ?? url;
-    }
+    const resolved = context.resolvedEntities?.images.get(attachment.url);
+    if (resolved) url = resolved;
   }
 
   return (

@@ -9,6 +9,9 @@ import { renderToString } from '@derockdev/discord-components-core/hydrate';
 import DiscordMessages from './transcript';
 import type { ResolveImageCallback } from '../downloader/images';
 import { streamToString } from '../utils/utils';
+import parse from 'discord-markdown-parser';
+import type { ASTNode, SingleASTNode } from 'simple-markdown';
+import type { APIAttachment, APIMessage } from 'discord.js';
 
 // read the package.json file and get the @derockdev/discord-components-core version
 let discordComponentsVersion = '^3.6.1';
@@ -19,6 +22,13 @@ try {
   discordComponentsVersion = packageJSON.dependencies['@derockdev/discord-components-core'] ?? discordComponentsVersion;
   // eslint-disable-next-line no-empty
 } catch {} // ignore errors
+
+export type ResolvedEntities = {
+  channels: Map<string, Channel | null>;
+  users: Map<string, User | null>;
+  roles: Map<string, Role | null>;
+  images: Map<string, string>;
+};
 
 export type RenderMessageContext = {
   messages: Message[];
@@ -31,6 +41,8 @@ export type RenderMessageContext = {
     resolveRole: (roleId: string) => Awaitable<Role | null>;
   };
 
+  resolvedEntities: ResolvedEntities;
+
   poweredBy?: boolean;
   footerText?: string;
   saveImages: boolean;
@@ -38,8 +50,86 @@ export type RenderMessageContext = {
   hydrate: boolean;
 };
 
-export default async function render({ messages, channel, callbacks, ...options }: RenderMessageContext) {
+// ── Pre-fetch helpers ───────────────────────────────────────────────────────
+
+function* walkNodes(nodes: ASTNode): Generator<SingleASTNode> {
+  if (!Array.isArray(nodes)) return;
+  for (const node of nodes) {
+    yield node;
+    if (node.content && typeof node.content !== 'string') {
+      yield* walkNodes(node.content as ASTNode);
+    }
+    if ('items' in node && Array.isArray(node.items)) {
+      for (const item of node.items as ASTNode[]) yield* walkNodes(item);
+    }
+  }
+}
+
+async function preFetchEntities(
+  messages: Message[],
+  callbacks: RenderMessageContext['callbacks'],
+  saveImages: boolean
+): Promise<ResolvedEntities> {
+  const channelIds = new Set<string>();
+  const userIds = new Set<string>();
+  const roleIds = new Set<string>();
+  const imageEntries: Array<[string, APIAttachment, APIMessage]> = [];
+
+  for (const message of messages) {
+    // collect text to scan for mentions
+    const texts = [
+      message.content,
+      ...message.embeds.map((e) => e.description ?? ''),
+      ...message.embeds.flatMap((e) => e.fields.map((f) => f.value)),
+    ].filter(Boolean) as string[];
+
+    for (const text of texts) {
+      try {
+        for (const node of walkNodes(parse(text))) {
+          if (node.type === 'channel') channelIds.add(node.id as string);
+          if (node.type === 'user') userIds.add(node.id as string);
+          if (node.type === 'role') roleIds.add(node.id as string);
+          // also add message author
+        }
+      } catch { /* ignore parse errors */ }
+    }
+
+    // collect image attachments to pre-download
+    if (saveImages) {
+      for (const att of message.attachments.values()) {
+        if (att.contentType?.startsWith('image/')) {
+          imageEntries.push([att.url, att.toJSON() as unknown as APIAttachment, message.toJSON() as unknown as APIMessage]);
+        }
+      }
+    }
+  }
+
+  const [channelPairs, userPairs, rolePairs, imagePairs] = await Promise.all([
+    Promise.all([...channelIds].map(async (id) => [id, await Promise.resolve(callbacks.resolveChannel(id)).catch(() => null)] as const)),
+    Promise.all([...userIds].map(async (id) => [id, await Promise.resolve(callbacks.resolveUser(id)).catch(() => null)] as const)),
+    Promise.all([...roleIds].map(async (id) => [id, await Promise.resolve(callbacks.resolveRole(id)).catch(() => null)] as const)),
+    saveImages
+      ? Promise.all(imageEntries.map(async ([url, att, msg]) => {
+          const resolved = await Promise.resolve(callbacks.resolveImageSrc(att, msg)).catch(() => null);
+          return [url, resolved ?? url] as const;
+        }))
+      : Promise.resolve([] as Array<readonly [string, string]>),
+  ]);
+
+  return {
+    channels: new Map(channelPairs),
+    users: new Map(userPairs),
+    roles: new Map(rolePairs),
+    images: new Map(imagePairs),
+  };
+}
+
+export default async function render({ messages, channel, callbacks, ...options }: Omit<RenderMessageContext, 'resolvedEntities'>) {
   const profiles = buildProfiles(messages);
+
+  // Pre-fetch all channels, users, roles, and images BEFORE building the React tree
+  // so all components can be synchronous (no async function components in the tree)
+  const resolvedEntities = await preFetchEntities(messages, callbacks, options.saveImages);
 
   const { prelude } = await prerenderToNodeStream(
     <html>
@@ -207,7 +297,7 @@ export default async function render({ messages, channel, callbacks, ...options 
           background: 'var(--page-bg)',
         }}
       >
-        <DiscordMessages messages={messages} channel={channel} callbacks={callbacks} {...options} />
+        <DiscordMessages messages={messages} channel={channel} callbacks={callbacks} resolvedEntities={resolvedEntities} {...options} />
       </body>
 
       {/* Make sure the script runs after the DOM has loaded */}

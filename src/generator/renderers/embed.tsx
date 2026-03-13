@@ -16,7 +16,7 @@ type RenderEmbedContext = RenderMessageContext & {
   message: Message;
 };
 
-export async function DiscordEmbed({ embed, context }: { embed: Embed; context: RenderEmbedContext }) {
+export function DiscordEmbed({ embed, context }: { embed: Embed; context: RenderEmbedContext }) {
   return (
     <DiscordEmbedComponent
       embedTitle={embed.title ?? undefined}
