@@ -12,6 +12,7 @@
     "test:typescript": "ts-node ./tests/generate.ts",
     "test:send-components-v2": "ts-node ./tests/components-v2-send.ts",
     "demo": "ts-node ./tests/demo-components-v2.ts",
+    "test:cv2": "ts-node ./tests/test-components-v2.ts",
     "lint": "prettier --write --cache . && eslint --cache --fix .",
     "typecheck": "tsc -p tsconfig.eslint.json"
   },

@@ -182,3 +182,6 @@ discord-html-transcripts-*.tgz
 
 # Generated demo transcripts
 tests/transcript-*.html
+
+# Local test runner scripts (run locally only)
+tests/*.ts
