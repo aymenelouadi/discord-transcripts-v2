@@ -152,8 +152,13 @@ export function MessageSingleASTNode({ node, context }: { node: SingleASTNode; c
     case 'user': {
       const id = node.id as string;
       const user = context.resolvedEntities?.users.get(id) ?? null;
+      const displayName = user ? (user.displayName ?? user.username) : null;
 
-      return <DiscordMention type="user">{user ? (user.displayName ?? user.username) : `<@${id}>`}</DiscordMention>;
+      return (
+        <span className="dc-user-mention" data-user-id={id}>
+          <DiscordMention type="user">{displayName ?? '@Unknown'}</DiscordMention>
+        </span>
+      );
     }
 
     case 'here':

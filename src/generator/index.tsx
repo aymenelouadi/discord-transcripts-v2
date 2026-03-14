@@ -2,7 +2,7 @@ import { type Awaitable, type Channel, type Message, type Role, type User } from
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
 import { buildProfiles } from '../utils/buildProfiles';
-import { revealSpoiler, scrollToMessage } from '../static/client';
+import { revealSpoiler, scrollToMessage, profilePopup } from '../static/client';
 import { readFileSync } from 'fs';
 import path from 'path';
 import { renderToString } from '@derockdev/discord-components-core/hydrate';
@@ -73,6 +73,8 @@ async function preFetchEntities(
   const userIds = new Set<string>();
   const roleIds = new Set<string>();
   const imageEntries: Array<[string, APIAttachment, APIMessage]> = [];
+  // Users already resolved by discord.js (from message.mentions.users — no extra fetch needed)
+  const directUsers = new Map<string, User>();
 
   for (const message of messages) {
     // collect text to scan for mentions
@@ -88,9 +90,14 @@ async function preFetchEntities(
           if (node.type === 'channel') channelIds.add(node.id as string);
           if (node.type === 'user') userIds.add(node.id as string);
           if (node.type === 'role') roleIds.add(node.id as string);
-          // also add message author
         }
       } catch { /* ignore parse errors */ }
+    }
+
+    // Merge users already provided by discord.js mention resolution
+    for (const [userId, user] of message.mentions.users) {
+      if (!directUsers.has(userId)) directUsers.set(userId, user);
+      userIds.add(userId);
     }
 
     // collect image attachments to pre-download
@@ -115,9 +122,17 @@ async function preFetchEntities(
       : Promise.resolve([] as Array<readonly [string, string]>),
   ]);
 
+  // Merge: prefer fetched results, fall back to directly available User objects
+  const usersMap = new Map(userPairs);
+  for (const [id, user] of directUsers) {
+    if (!usersMap.has(id) || usersMap.get(id) === null) {
+      usersMap.set(id, user);
+    }
+  }
+
   return {
     channels: new Map(channelPairs),
-    users: new Map(userPairs),
+    users: usersMap,
     roles: new Map(rolePairs),
     images: new Map(imagePairs),
   };
@@ -299,6 +314,8 @@ export default async function render({ messages, channel, callbacks, ...options 
         }}
       >
         <DiscordMessages messages={messages} channel={channel} callbacks={callbacks} resolvedEntities={resolvedEntities} {...options} />
+        {/* Profile popup — populated by profilePopup script */}
+        <script dangerouslySetInnerHTML={{ __html: profilePopup }} />
       </body>
 
       {/* Make sure the script runs after the DOM has loaded */}

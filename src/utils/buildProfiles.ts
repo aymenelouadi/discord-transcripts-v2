@@ -1,11 +1,14 @@
 import { type GuildMember, type Message, type User, UserFlags } from 'discord.js';
 
 export type Profile = {
-  author: string; // author of the message
-  avatar?: string; // avatar of the author
-  roleColor?: string; // role color of the author
-  roleIcon?: string; // role color of the author
-  roleName?: string; // role name of the author
+  author: string; // display name / nickname
+  username?: string; // raw username (e.g. john_doe)
+  avatar?: string; // avatar URL
+  banner?: string; // banner image URL (if available)
+  bannerColor?: string; // accent color as hex (e.g. #5865f2)
+  roleColor?: string; // highest role color
+  roleIcon?: string; // highest role icon
+  roleName?: string; // highest hoisted role name
 
   bot?: boolean; // is the author a bot
   verified?: boolean; // is the author verified
@@ -45,9 +48,16 @@ export async function buildProfiles(messages: Message[]) {
 }
 
 function buildProfile(member: GuildMember | null, author: User) {
+  const accentColor = author.accentColor;
+  const bannerColor = accentColor != null
+    ? `#${accentColor.toString(16).padStart(6, '0')}`
+    : undefined;
   return {
     author: member?.nickname ?? author.displayName ?? author.username,
-    avatar: member?.displayAvatarURL({ size: 64 }) ?? author.displayAvatarURL({ size: 64 }),
+    username: author.username,
+    avatar: member?.displayAvatarURL({ size: 128 }) ?? author.displayAvatarURL({ size: 128 }),
+    banner: author.bannerURL({ size: 600 }) ?? undefined,
+    bannerColor,
     roleColor: member?.displayHexColor,
     roleIcon: member?.roles.icon?.iconURL() ?? undefined,
     roleName: member?.roles.hoist?.name ?? undefined,

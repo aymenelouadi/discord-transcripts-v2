@@ -469,4 +469,119 @@ export const globalStyles = `
     font-size: 12px;
     font-family: 'Inter', Whitney, sans-serif;
   }
+
+  /* ── User Mention ── */
+  .dc-user-mention {
+    display: inline;
+    cursor: pointer;
+  }
+
+  /* ── Profile Popup Card ── */
+  .dc-profile-card {
+    position: absolute;
+    z-index: 9999;
+    background: #232428;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: none;
+    font-family: 'Inter', Whitney, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .dc-profile-banner {
+    height: 96px;
+    background: #5865f2;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .dc-profile-body {
+    padding: 12px 16px 16px;
+    position: relative;
+  }
+
+  .dc-profile-avatar-wrap {
+    position: absolute;
+    top: -40px;
+    left: 16px;
+  }
+
+  .dc-profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid #232428;
+    display: block;
+    background: #36393f;
+  }
+
+  .dc-profile-name-row {
+    margin-top: 52px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .dc-profile-display-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f2f3f5;
+    line-height: 1.2;
+  }
+
+  .dc-profile-bot-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #5865f2;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+  }
+
+  .dc-profile-username {
+    font-size: 13px;
+    color: #b5bac1;
+    margin-top: 3px;
+  }
+
+  .dc-profile-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 10px 0;
+  }
+
+  .dc-profile-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #b5bac1;
+    margin-bottom: 6px;
+  }
+
+  .dc-role-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 12px;
+    color: #f2f3f5;
+  }
+
+  .dc-role-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
 `;
